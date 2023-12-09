@@ -1,0 +1,576 @@
+openapi: 3.0.0
+info:
+  title: Recruit CRM
+  description: These demo API are created for recruit CRM interview assignment.
+
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api/v1/login
+
+paths:
+  /api/v1/login:
+    post:
+      tags:
+        - User Authentication
+      summary: Login
+      description: Login
+      parameters:
+        - name: email
+          in: query
+          description: The email for login
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password for login in clear text
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/login'
+        '400':
+          description: Invalid Email or Password
+        '500':
+          description: Something went wrong.
+
+  /api/v1/register:
+    post:
+      tags:
+        - User registration
+      summary: This API helps to register user details.
+      description: This API helps to register user details.
+      parameters: 
+        - name: first_name
+          in: query
+          description: The first name of the user.
+          required: true
+          schema:
+            type: string
+        - name: last_name
+          in: query
+          description: The last name of the user.
+          required: true
+          schema:
+            type: string
+        - name: email
+          in: query
+          description: The email address of the user.
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password of the user.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/registration'
+        '500':
+          description: Something went wrong.
+
+
+  /api/v1/logout:
+    post:
+      tags:
+        - User session logout.
+      summary: This api logs out the user.
+      description: This api logs out the user.
+      parameters: 
+        - name: token
+          in: header
+          description: The token of logged in user.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/logout'
+        '500':
+          description: Something went wrong.
+  
+  /api/v1/token/refresh:
+    post:
+      tags:
+        - Refresh token.
+      summary: This api refresh the login token.
+      description: This api refresh the login token.
+      parameters: 
+        - name: token
+          in: header
+          description: The token of logged in user.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/refresh'
+        '500':
+          description: Something went wrong.
+          
+
+  /api/v1/candidates:
+    post:
+      tags:
+        - Candidate store.
+      summary: This api stores the candidate details.
+      description: This api stores the candidate details.
+      parameters: 
+        - name: token
+          in: header
+          description: The token of logged in user.
+          required: true
+          schema:
+            type: string
+        - name: first_name
+          in: query
+          description: The first name of the candidate.
+          required: true
+          schema:
+            type: string
+        - name: last_name
+          in: query
+          description: The last name of the candidate.
+          required: true
+          schema:
+            type: string
+        - name: age
+          in: query
+          description: The age of the candidate.
+          required: true
+          schema:
+            type: integer
+        - name: department
+          in: query
+          description: The department of the candidate.
+          required: true
+          schema:
+            type: string
+        - name: min_salary_expectation
+          in: query
+          description: The min salary expectation of the candidate.
+          required: true
+          schema:
+            type: integer
+        - name: max_salary_expectation
+          in: query
+          description: The max salary expectation of the candidate.
+          required: true
+          schema:
+            type: integer
+        - name: currency_id
+          in: query
+          description: The currency id of the candidate.
+          required: true
+          schema:
+            type: string
+        - name: address_id
+          in: query
+          description: The address id of the candidate.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/candidate-register'
+        '500':
+          description: Something went wrong.
+
+  /api/v1/candidates/{candidateId}:
+    get:
+      tags:
+        - Candidate details.
+      summary: This api fetches the candidate details.
+      description: This api fetches the candidate details.
+      parameters:
+        - name: token
+          in: header
+          description: The token of logged in user.
+          required: true
+          schema:
+            type: string
+        - name: candidateId
+          in: path
+          description: The id of the candidate.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/candidate-details'
+        '500':
+          description: Something went wrong.
+
+
+  /api/v1/candidates-list:
+    get:
+      tags:
+        - Candidate list.
+      summary: This api fetches the candidate list.
+      description: This api fetches the candidate list.
+      parameters:
+        - name: token
+          in: header
+          description: The token of logged in user.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/candidate-list'
+        '500':
+          description: Something went wrong.
+
+  /api/v1/candidates-delete/{candidateId}:
+    delete:
+      tags:
+        - Candidate delete.
+      summary: This api deletes the candidate data.
+      description: This api deletes the candidate data.
+      parameters:
+        - name: token
+          in: header
+          description: The token of logged in user.
+          required: true
+          schema:
+            type: string
+        - name: candidateId
+          in: path
+          description: The id of the candidate.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/candidate-delete'
+        '500':
+          description: Something went wrong.
+
+  /api/v1/candidates-update/{candidateId}:
+    post:
+      tags:
+        - Candidate update.
+      summary: This api stores the candidate details.
+      description: This api stores the candidate details.
+      parameters: 
+        - name: token
+          in: header
+          description: The token of logged in user.
+          required: true
+          schema:
+            type: string
+        - name: candidateId
+          in: path
+          description: The id of the candidate.
+          required: true
+          schema:
+            type: string
+        - name: first_name
+          in: query
+          description: The first name of the candidate.
+          required: true
+          schema:
+            type: string
+        - name: last_name
+          in: query
+          description: The last name of the candidate.
+          required: true
+          schema:
+            type: string
+        - name: age
+          in: query
+          description: The age of the candidate.
+          required: true
+          schema:
+            type: integer
+        - name: department
+          in: query
+          description: The department of the candidate.
+          required: true
+          schema:
+            type: string
+        - name: min_salary_expectation
+          in: query
+          description: The min salary expectation of the candidate.
+          required: true
+          schema:
+            type: integer
+        - name: max_salary_expectation
+          in: query
+          description: The max salary expectation of the candidate.
+          required: true
+          schema:
+            type: integer
+        - name: currency_id
+          in: query
+          description: The currency id of the candidate.
+          required: true
+          schema:
+            type: string
+        - name: address_id
+          in: query
+          description: The address id of the candidate.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/candidate-update'
+        '500':
+          description: Something went wrong.
+
+  /api/v1/candidates/search:
+    get:
+      tags:
+        - Candidate search.
+      summary: This api fetches the candidate list.
+      description: This api fetches the candidate list.
+      parameters:
+        - name: token
+          in: header
+          description: The token of logged in user.
+          required: true
+          schema:
+            type: string
+        - name: keyword
+          in: query
+          description: The keyword to filter the records.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/candidate-list'
+        '500':
+          description: Something went wrong.
+
+
+components:
+  schemas:
+    login:
+      type: object
+      properties:
+        message:
+          type: string
+          format: varchar
+          example: "Logged In successfully"
+        data:
+          type: object
+          format: varchar
+          example: '{
+            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC92MVwvbG9naW4iLCJpYXQiOjE2OTA4MTAxNjIsImV4cCI6MTY5MDgxMzc2MiwibmJmIjoxNjkwODEwMTYyLCJqdGkiOiJiOUN5dzdqTk9pZmRZd3QxIiwic3ViIjoiYzcwZGRlODAtMjdhMy00NzA1LTg4OGEtNDU1NWU4YmFkNzA1IiwicHJ2IjoiZjY0ZDQ4YTZjZWM3YmRmYTdmYmY4OTk0NTRiNDg4YjNlNDYyNTIwYSJ9.SzUKmP7sdhLeX3NAjxtPU-GbZaKhSRazMpI6c3SOXpR5wtOysh2v8PM0EHi4vlcaBICgGSpzR7NI7Ghbed9QX23xhCYQEKs7FTtDJ1UFDC_cTyGOKl-Vis4kvQua9qWz4UtuO_88L2jZb5n0ssv7SCL8i0KxvW6OEgwLto7D32MBHki0xHs7_x0n2f1-UG7hLgv00mGxrzVYdj-nQycVGMRXLbVvA-GJSzHGgPFPgIsqOy_rB65WHWwNgRzZmq2-QgPT15nF1a7en21-sWxh2Lfq0DKwmqBdILc5uH_JY601Srrs83MisVtJiwtZE1mppU7Bvrq9GGbhcOX-7GMJHu1aAC1U1Vk6ibnsDpNEy1kO8Ud4vtVPV62a3mmkAK5lIPjjRADppRbg81vDPD8Bfq6sgiGwAv7ymzD6vgvgYe9H2SfmO4k7p4U6r4iMuAA_C3XanNdOkMeApk_-ISWcIitTS6nH37gMPze5dRR8JaCTr1nlfU8lZUhbaiOnAT7LfmHVaiRLWBxBb6ILG8BYKxty4HNb01voL-4gAbTGQBdUpP_l7l8NsymUKw-E7zzfB2nqVnR6f_SY8i_05xcZXdZs9ihi5FcW2DOAzxHhKZNY6XRTL63jXEyBVAwGtnbBmq5x_4SnENBTr1EnKA-cmMkt7_Lq1YbAcQdDZQME-ic"
+            }'
+    
+    registration:
+      type: object
+      properties:
+        message:
+          type: string
+          format: varchar
+          example: "User registered successfully"
+    
+    logout:
+      type: object
+      properties:
+        message:
+          type: string
+          format: varchar
+          example: "Logged out successfully"
+    
+    refresh:
+      type: object
+      properties:
+        message:
+          type: string
+          format: varchar
+          example: "Token refreshed successfully"
+        data:
+          type: object
+          format: varchar
+          example: '{
+            "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3Q6ODAwMFwvYXBpXC92MVwvbG9naW4iLCJpYXQiOjE2OTA4MTAxNjIsImV4cCI6MTY5MDgxMzc2MiwibmJmIjoxNjkwODEwMTYyLCJqdGkiOiJiOUN5dzdqTk9pZmRZd3QxIiwic3ViIjoiYzcwZGRlODAtMjdhMy00NzA1LTg4OGEtNDU1NWU4YmFkNzA1IiwicHJ2IjoiZjY0ZDQ4YTZjZWM3YmRmYTdmYmY4OTk0NTRiNDg4YjNlNDYyNTIwYSJ9.SzUKmP7sdhLeX3NAjxtPU-GbZaKhSRazMpI6c3SOXpR5wtOysh2v8PM0EHi4vlcaBICgGSpzR7NI7Ghbed9QX23xhCYQEKs7FTtDJ1UFDC_cTyGOKl-Vis4kvQua9qWz4UtuO_88L2jZb5n0ssv7SCL8i0KxvW6OEgwLto7D32MBHki0xHs7_x0n2f1-UG7hLgv00mGxrzVYdj-nQycVGMRXLbVvA-GJSzHGgPFPgIsqOy_rB65WHWwNgRzZmq2-QgPT15nF1a7en21-sWxh2Lfq0DKwmqBdILc5uH_JY601Srrs83MisVtJiwtZE1mppU7Bvrq9GGbhcOX-7GMJHu1aAC1U1Vk6ibnsDpNEy1kO8Ud4vtVPV62a3mmkAK5lIPjjRADppRbg81vDPD8Bfq6sgiGwAv7ymzD6vgvgYe9H2SfmO4k7p4U6r4iMuAA_C3XanNdOkMeApk_-ISWcIitTS6nH37gMPze5dRR8JaCTr1nlfU8lZUhbaiOnAT7LfmHVaiRLWBxBb6ILG8BYKxty4HNb01voL-4gAbTGQBdUpP_l7l8NsymUKw-E7zzfB2nqVnR6f_SY8i_05xcZXdZs9ihi5FcW2DOAzxHhKZNY6XRTL63jXEyBVAwGtnbBmq5x_4SnENBTr1EnKA-cmMkt7_Lq1YbAcQdDZQME-ic"
+            }'
+
+    candidate-register:
+      type: object
+      properties:
+        message:
+          type: string
+          format: varchar
+          example: "Candidate stored successfully"
+
+    candidate-details:
+      type: object
+      properties:
+        message:
+          type: string
+          format: varchar
+          example: "Candidate details found."
+        data:
+          type: object
+          format: varchar
+          example: '{
+                  "id": "0d699266-e1ea-4fa1-a1a3-778f7e0ffbce",
+                  "owner_id": "c70dde80-27a3-4705-888a-4555e8bad705",
+                  "first_name": "Dummy",
+                  "last_name": "User4",
+                  "age": 42,
+                  "department": "operation",
+                  "min_salary_expectation": 1000000,
+                  "max_salary_expectation": 5000000,
+                  "currency_id": "0182f626-8706-4ee4-a31d-fa51289be404",
+                  "address_id": "0182f626-8706-4ee4-a31d-fa51289be804",
+                  "owner": {
+                      "id": "c70dde80-27a3-4705-888a-4555e8bad705",
+                      "email": "test.user2@gmail.com",
+                      "password": "$2y$10$XyWZbW6Wy51TRl1RyoaQ0eOdUrhDSTN6MBeIgc8kloT3cFqiA7etW",
+                      "first_name": "Test",
+                      "last_name": "User2"
+                  },
+                  "currency": {
+                      "id": "0182f626-8706-4ee4-a31d-fa51289be404",
+                      "code": "INR"
+                  },
+                  "address": {
+                      "id": "0182f626-8706-4ee4-a31d-fa51289be804",
+                      "country": "India",
+                      "street_address": "H-111",
+                      "city": "Noida",
+                      "state": "U.P.",
+                      "postal_code": "201306"
+                  }
+              }'
+
+    candidate-list: 
+      type: object
+      properties:
+        message:
+          type: string
+          format: varchar
+          example: "Candidate list found."
+        data:
+          type: object
+          format: varchar
+          example: '{
+                "current_page": 1,
+                "data": [
+                    {
+                        "id": "0d699266-e1ea-4fa1-a1a3-778f7e0ffbce",
+                        "owner_id": "c70dde80-27a3-4705-888a-4555e8bad705",
+                        "first_name": "Dummy",
+                        "last_name": "User4",
+                        "age": 42,
+                        "department": "operation",
+                        "min_salary_expectation": 1000000,
+                        "max_salary_expectation": 5000000,
+                        "currency_id": "0182f626-8706-4ee4-a31d-fa51289be404",
+                        "address_id": "0182f626-8706-4ee4-a31d-fa51289be804",
+                        "owner": {
+                            "id": "c70dde80-27a3-4705-888a-4555e8bad705",
+                            "email": "test.user2@gmail.com",
+                            "password": "$2y$10$XyWZbW6Wy51TRl1RyoaQ0eOdUrhDSTN6MBeIgc8kloT3cFqiA7etW",
+                            "first_name": "Test",
+                            "last_name": "User2"
+                        },
+                        "currency": {
+                            "id": "0182f626-8706-4ee4-a31d-fa51289be404",
+                            "code": "INR"
+                        },
+                        "address": {
+                            "id": "0182f626-8706-4ee4-a31d-fa51289be804",
+                            "country": "India",
+                            "street_address": "H-111",
+                            "city": "Noida",
+                            "state": "U.P.",
+                            "postal_code": "201306"
+                        }
+                    }
+                ],
+                "first_page_url": "http://127.0.0.1:8000/api/v1/candidates?page=1",
+                "from": 1,
+                "last_page": 1,
+                "last_page_url": "http://127.0.0.1:8000/api/v1/candidates?page=1",
+                "links": [
+                    {
+                        "url": null,
+                        "label": "&laquo; Previous",
+                        "active": false
+                    },
+                    {
+                        "url": "http://127.0.0.1:8000/api/v1/candidates?page=1",
+                        "label": "1",
+                        "active": true
+                    },
+                    {
+                        "url": null,
+                        "label": "Next &raquo;",
+                        "active": false
+                    }
+                ],
+                "next_page_url": null,
+                "path": "http://127.0.0.1:8000/api/v1/candidates",
+                "per_page": 10,
+                "prev_page_url": null,
+                "to": 1,
+                "total": 1
+            }'
+
+    candidate-delete:
+      type: object
+      properties:
+        message:
+          type: string
+          format: varchar
+          example: "Candidate deleted successfully."
+
+    
+    candidate-update:
+      type: object
+      properties:
+        message:
+          type: string
+          format: varchar
+          example: "Candidate updated successfully"
